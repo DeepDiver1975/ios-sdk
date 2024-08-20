@@ -364,6 +364,7 @@
 	NSArray<OCShareRole *> *roles = nil;
 	OCLocationType locationType = location.type;
 	OCShareTypesMask shareTypeMask = [OCShare maskForType:shareType];
+	BOOL resharingSupported = !self.useDrives;
 
 	if (locationType == OCLocationTypeUnknown)
 	{
@@ -383,12 +384,12 @@
 				// - files, folders
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeViewer
 						       shareTypes:OCShareTypesMaskUserShare|OCShareTypesMaskGroupShare
-						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskShare
+						     permissions:OCSharePermissionsMaskRead|(resharingSupported ? OCSharePermissionsMaskShare : 0)
 					 customizablePermissions:OCSharePermissionsMaskNone
 						       locations:OCLocationTypeFile|OCLocationTypeFolder
 						      symbolName:@"eye.fill"
 						   localizedName:OCLocalized(@"Viewer")
-					    localizedDescription:OCLocalized(@"Download, preview and share")],
+					    localizedDescription:OCLocalized(resharingSupported ? @"Download, preview and share" : @"Download and preview")],
 
 				// - drives
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeViewer
@@ -404,22 +405,22 @@
 				// - files
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeEditor
 						       shareTypes:OCShareTypesMaskUserShare|OCShareTypesMaskGroupShare
-						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskShare
+						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|(resharingSupported ? OCSharePermissionsMaskShare : 0)
 					 customizablePermissions:OCSharePermissionsMaskNone
 						       locations:OCLocationTypeFile
 						      symbolName:@"pencil"
 						   localizedName:OCLocalized(@"Editor")
-					    localizedDescription:OCLocalized(@"Edit, download, preview and share")],
+					    localizedDescription:OCLocalized(resharingSupported ? @"Edit, download, preview and share" : @"Edit, download and preview")],
 
 				// - folders
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeEditor
 						       shareTypes:OCShareTypesMaskUserShare|OCShareTypesMaskGroupShare
-						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|OCSharePermissionsMaskShare
+						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|(resharingSupported ? OCSharePermissionsMaskShare : 0)
 					 customizablePermissions:OCSharePermissionsMaskNone
 						       locations:OCLocationTypeFolder
 						      symbolName:@"pencil"
 						   localizedName:OCLocalized(@"Editor")
-					    localizedDescription:OCLocalized(@"Upload, edit, delete, download, preview and share")],
+					    localizedDescription:OCLocalized(resharingSupported ? @"Upload, edit, delete, download, preview and share" : @"Upload, edit, delete, download and preview")],
 
 				// - drives
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeEditor
@@ -435,19 +436,19 @@
 				// - drives
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeManager
 						       shareTypes:OCShareTypesMaskUserShare|OCShareTypesMaskGroupShare
-						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|OCSharePermissionsMaskShare
+						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|(resharingSupported ? OCSharePermissionsMaskShare : 0)
 					 customizablePermissions:OCSharePermissionsMaskNone
 						       locations:OCLocationTypeDrive
 						      symbolName:@"person.fill"
 						   localizedName:OCLocalized(@"Manager")
-					    localizedDescription:OCLocalized(@"Upload, edit, delete, download, preview and share")],
+					    localizedDescription:OCLocalized(resharingSupported ? @"Upload, edit, delete, download, preview and share" : @"Upload, edit, delete, download and preview")],
 
 				// ## Custom
 				// - files
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeCustom
 						       shareTypes:OCShareTypesMaskUserShare|OCShareTypesMaskGroupShare
-						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskShare
-					 customizablePermissions:OCSharePermissionsMaskUpdate|OCSharePermissionsMaskShare
+						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|(resharingSupported ? OCSharePermissionsMaskShare : 0)
+					 customizablePermissions:OCSharePermissionsMaskUpdate|(resharingSupported ? OCSharePermissionsMaskShare : 0)
 						       locations:OCLocationTypeFile
 						      symbolName:@"gearshape.fill"
 						   localizedName:OCLocalized(@"Custom")
@@ -456,8 +457,8 @@
 				// - folders, drives
 				[[OCShareRole alloc] initWithType:OCShareRoleTypeCustom
 						       shareTypes:OCShareTypesMaskUserShare|OCShareTypesMaskGroupShare
-						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|OCSharePermissionsMaskShare
-					 customizablePermissions:OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|OCSharePermissionsMaskShare
+						     permissions:OCSharePermissionsMaskRead|OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|(resharingSupported ? OCSharePermissionsMaskShare : 0)
+					 customizablePermissions:OCSharePermissionsMaskUpdate|OCSharePermissionsMaskCreate|OCSharePermissionsMaskDelete|(resharingSupported ? OCSharePermissionsMaskShare : 0)
 						       locations:OCLocationTypeFolder|OCLocationTypeDrive
 						      symbolName:@"gearshape.fill"
 						   localizedName:OCLocalized(@"Custom")
